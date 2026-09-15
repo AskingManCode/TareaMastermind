@@ -11,4 +11,16 @@ class Color {
       return this.nombreColor;
     }
 
+    // Comprueba si este objeto representa un color permitido.
+    func esColorValido(): bool {
+        return (
+            this.nombreColor == "Amarillo"
+            || this.nombreColor == "Rojo"
+            || this.nombreColor == "Verde"
+            || this.nombreColor == "Azul"
+            || this.nombreColor == "Morado"
+            || this.nombreColor == "Negro"
+        );
+    }
+
 }
