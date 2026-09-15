@@ -1,3 +1,33 @@
+import "./Color.lucia";
+
 class GeneradorCodigo {
+
+     // Colores disponibles para formar las combinaciones.
+     let listaColores: list<Color> = [
+            Color("Amarillo"),
+            Color("Rojo"),
+            Color("Verde"),
+            Color("Azul"),
+            Color("Morado"),
+            Color("Negro")
+            //Color("Blanco")
+        ];
+
+    // Verifica si un color pertenece a la paleta oficial.
+    // Devuelve true si está permitido y false si no existe.
+   func esColorValido(color: Color): bool {
+        let nombreIngresado: string =
+            color.obtenerNombreColor().trim().lower();
     
+        for (let i: int = 0; i < len(this.listaColores); i++) {
+            let nombrePermitido: string =
+                this.listaColores[i].obtenerNombreColor().trim().lower();
+    
+            if (nombrePermitido == nombreIngresado) {
+                return true;
+            }
+        }
+    
+        return false;
+    }
 }
