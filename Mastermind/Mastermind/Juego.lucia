@@ -78,7 +78,7 @@ class Juego {
             this.generadorCodigo.setNivelDificultad(ALTA);
 
             this.mensajes.mostrarResultadoDificultad(
-                "Dificultad seleccionada: Alta."
+                "Dificultad seleccionada: Alto."
             );
 
             return; // si entrada es valida rompe bucle

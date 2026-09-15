@@ -1,4 +1,4 @@
-import "./Dificultad.lucia";
+
 class Mensajes {
     
     // Muestra todas las instrucciones para ingresar una propuesta.
@@ -18,7 +18,7 @@ class Mensajes {
         print("");
         print("Seleccione la dificultad:");
         print("1. Normal");
-        print("2. Alta");
+        print("2. Alto");
     }
      
     func mostrarResultadoDificultad(mensaje: string): void {
