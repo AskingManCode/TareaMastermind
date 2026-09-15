@@ -1,19 +1,22 @@
 import "./Color.lucia";
+import "./Dificultad.lucia";
 
 class GeneradorCodigo {
 
-     // Colores disponibles para formar las combinaciones.
-     let listaColores: list<Color> = [
-            Color("Amarillo"),
-            Color("Rojo"),
-            Color("Verde"),
-            Color("Azul"),
-            Color("Morado"),
-            Color("Negro")
-            //Color("Blanco")
-        ];
+    let nivelDificultad: int = NORMAL;
 
-    // Verifica si un color pertenece a la paleta oficial.
-    // Devuelve true si está permitido y false si no existe.
-   
+    // Colores disponibles para formar las combinaciones.
+    let listaColores: list<Color> = [
+        Color("Amarillo"),
+        Color("Rojo"),
+        Color("Verde"),
+        Color("Azul"),
+        Color("Morado"),
+        Color("Negro")
+        //Color("Blanco")
+    ];
+
+    func setNivelDificultad(dificultad: int): void {
+        this.nivelDificultad = dificultad;
+    }
 }
