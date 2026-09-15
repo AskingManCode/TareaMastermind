@@ -5,6 +5,7 @@ class Mensajes {
         print("Ingrese cuatro colores separados por comas.");
         print("Colores: Amarillo, Rojo, Verde, Azul, Morado y Negro.");
         print("Ejemplo: Rojo, Azul, Verde, Amarillo.");
+        print("");
     }
 
     // Muestra cualquier problema encontrado en la propuesta.
