@@ -1,0 +1,14 @@
+import "./Mastermind/juego.lucia";
+
+let juego: Juego = Juego();
+
+juego.darBienvenida();
+
+juego.seleccionarDificultad();
+
+juego.seleccionarCantidadIntentos();
+
+juego.generarCombinacionSecreta();
+
+juego.jugar();
+
