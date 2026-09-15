@@ -1,11 +1,13 @@
 import "./Mensajes.lucia";
 import "./Color.lucia";
 import "./GeneradorCodigo.lucia";
+import "./Dificultad.lucia";
 
 class Juego {
 
     let mensajes: Mensajes = Mensajes();
      let generadorCodigo: GeneradorCodigo = GeneradorCodigo();
+     let nivelDificultad: int = NORMAL;
 
     func leerPropuesta(): list<Color> {
     while (true) {
@@ -51,4 +53,40 @@ class Juego {
         }
     }
  }
+
+
+ func seleccionarDificultad(): void {
+    while (true) {
+        this.mensajes.mostrarMenuDificultad();
+
+        let opcion: string = input("> ").trim();
+
+        if (opcion == "1") {
+            this.nivelDificultad = NORMAL;
+            this.generadorCodigo.setNivelDificultad(NORMAL);
+
+            this.mensajes.mostrarResultadoDificultad(
+                "Dificultad seleccionada: Normal."
+            );
+
+            return;
+        }
+
+        if (opcion == "2") {
+            this.nivelDificultad = ALTA;
+            this.generadorCodigo.setNivelDificultad(ALTA);
+
+            this.mensajes.mostrarResultadoDificultad(
+                "Dificultad seleccionada: Alta."
+            );
+
+            return;
+        }
+
+        this.mensajes.mostrarResultadoDificultad(
+            "Opción inválida. Ingrese 1 o 2."
+        );
+    }
+ }
+ 
 }

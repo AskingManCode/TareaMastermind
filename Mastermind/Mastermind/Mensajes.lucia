@@ -1,3 +1,4 @@
+import "./Dificultad.lucia";
 class Mensajes {
     
     // Muestra todas las instrucciones para ingresar una propuesta.
@@ -11,6 +12,17 @@ class Mensajes {
     // Muestra cualquier problema encontrado en la propuesta.
     func mostrarErrorPropuesta(error: string): void {
         print("Propuesta inválida: ${error}");
+    }
+    // muestra opciones para seleccionar la dificultad
+     func mostrarMenuDificultad(): void {
+        print("");
+        print("Seleccione la dificultad:");
+        print("1. Normal");
+        print("2. Alta");
+    }
+     
+    func mostrarResultadoDificultad(mensaje: string): void {
+        print(mensaje);
     }
     
 }
