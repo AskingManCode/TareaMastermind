@@ -1,7 +1,5 @@
-import "./Dificultad.lucia";
 class Mensajes {
-    
-    // Muestra todas las instrucciones para ingresar una propuesta.
+
     func mostrarSolicitudPropuesta(): void {
         print("Ingrese cuatro colores separados por comas.");
         print("Colores: Amarillo, Rojo, Verde, Azul, Morado y Negro.");
@@ -9,20 +7,32 @@ class Mensajes {
         print("");
     }
 
-    // Muestra cualquier problema encontrado en la propuesta.
     func mostrarErrorPropuesta(error: string): void {
         print("Propuesta inválida: ${error}");
     }
-    // muestra opciones para seleccionar la dificultad
-     func mostrarMenuDificultad(): void {
+
+    func mostrarMenuDificultad(): void {
         print("");
         print("Seleccione la dificultad:");
         print("1. Normal");
         print("2. Alta");
     }
-     
+
     func mostrarResultadoDificultad(mensaje: string): void {
         print(mensaje);
     }
-    
+
+    func mostrarMenuIntentos(): void {
+        print("");
+        print("Ingrese la cantidad de intentos para la partida.");
+        print("Debe ser un número entre 1 y 15.");
+    }
+
+    func mostrarResultadoIntentos(mensaje: string): void {
+        print(mensaje);
+    }
+
+    func mostrarIntentosRestantes(cantidad: int): void {
+        print("Intentos restantes: ${cantidad}.");
+    }
 }

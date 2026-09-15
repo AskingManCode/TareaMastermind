@@ -43,7 +43,7 @@ class Juego {
             let color: Color = Color(nombre);      //convierte el nombre ingresado a tipo color
 
             // Comprueba si el color pertenece a los colores permitidos
-            if (!this.generadorCodigo.esColorValido(color)) {
+            if (!color.esColorValido()) { {
                 this.mensajes.mostrarErrorPropuesta(
                     "el color ${nombre} no está permitido."
                 );
