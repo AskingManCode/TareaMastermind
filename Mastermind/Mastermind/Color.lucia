@@ -1,4 +1,14 @@
 class Color {
 
+    let nombreColor: string;
+
+    constructor(nombreColor:string) {
+
+        this.nombreColor=nombreColor;
+    }
+
+    func obtenerNombreColor(): string {
+      return this.nombreColor;
+    }
 
 }
