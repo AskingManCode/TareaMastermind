@@ -14,22 +14,27 @@ class Juego {
     let mensajes: Mensajes = Mensajes();
      let generadorCodigo: GeneradorCodigo = GeneradorCodigo();
      let nivelDificultad: int = NORMAL;
+     let combinacionSecreta: list<Color> = [];
 
+    //lee la entrada y valida la propuesta
     func leerPropuesta(): list<Color> {
     while (true) {
-    
-        // Solicita al usuario que ingrese una nueva propuesta.
-        this.mensajes.mostrarSolicitudPropuesta();
 
-        // Lee la entrada, elimina espacios y separa los colores por comas.
+        // Solicita una propuesta y muestra instrucciones
+        // segun la dificultad seleccionada
+        this.mensajes.mostrarSolicitudPropuesta(
+            this.nivelDificultad
+        );
+
+        // Separa por comas las posiciones ingresadas.
         let entrada: string = input("> ").trim();
         let partes: list<string> = entrada.split(",");
         let propuesta: list<Color> = [];
 
-        // Verifica que la propuesta sea de 4 colores
+        // La propuesta debe contener exactamente cuatro posiciones.
         if (len(partes) != 4) {
             this.mensajes.mostrarErrorPropuesta(
-                "debe ingresar exactamente cuatro colores."
+                "debe ingresar exactamente cuatro posiciones."
             );
 
             continue;
@@ -37,28 +42,46 @@ class Juego {
 
         let valida: bool = true;
 
-        // Recorre cada color ingresado para comprobar que esté permitido.
+        // Valida cada posición de la propuesta
         for (let i: int = 0; i < len(partes); i++) {
-            let nombre: string = partes[i].trim().capitalize();
-            let color: Color = Color(nombre);      //convierte el nombre ingresado a tipo color
 
-            // Comprueba si el color pertenece a los colores permitidos
-            if (!color.esColorValido()) { {
-                this.mensajes.mostrarErrorPropuesta(
-                    "el color ${nombre} no está permitido."
-                );
+            // Elimina espacios externos y normaliza el nombre
+            let nombre: string =
+                partes[i].trim().capitalize();
 
-                valida = false;
+            // Crea el objeto que representa la posición ingresada
+            let color: Color = Color(nombre);
+
+            // En dificultad Alta se permite una posición vacía
+            if (
+                nombre == ""
+                && this.nivelDificultad == ALTA
+            ) {
+                propuesta.append(color);
             } else {
-                propuesta.append(color);  // Agrega el color a la propuesta cuando es válido.
+
+                // Comprueba que el nombre pertenezca
+                // a colores permitido
+                if (!color.esColorValido()) {
+                    this.mensajes.mostrarErrorPropuesta(
+                        "el color ${nombre} no está permitido."
+                    );
+
+                    valida = false;
+                } else {
+                    // Agrega un color válido a la propuesta
+                    propuesta.append(color);
+                }
             }
         }
-        //si todos los colores fueron validos devuelve propuesta
+
+        // Devuelve la propuesta solamente cuando todas
+        // sus posiciones fueron validadas
         if (valida) {
             return propuesta;
         }
     }
- }
+}
 
  // Muestra opciones de dificultad y gestiona la seleccion del usuario.
  func seleccionarDificultad(): void {
@@ -161,6 +184,11 @@ class Juego {
 
         this.hacerIntento(propuesta);
     }
+}
+    // Genera y guarda la combinación secreta según la dificultad
+    func generarCombinacionSecreta(): void {
+    this.combinacionSecreta
+        = this.generadorCodigo.generarCodigo();
 }
  
 }
