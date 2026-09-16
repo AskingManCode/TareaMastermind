@@ -19,4 +19,49 @@ class GeneradorCodigo {
     func setNivelDificultad(dificultad: int): void {
         this.nivelDificultad = dificultad;
     }
+
+
+    func generarCodigo(): list<Color> {
+        let codigoSecreto: list<Color> = [];
+
+        if (this.nivelDificultad == NORMAL) {
+            let coloresDisponibles: list<Color>
+                = this.listaColores.copy();
+
+            for (let i: int = 0; i < 4; i++) {
+                let indice: int = random(
+                    0,
+                    len(coloresDisponibles) - 1
+                );
+
+                codigoSecreto.append(
+                    coloresDisponibles[indice]
+                );
+
+                coloresDisponibles.removeAt(indice);
+            }
+
+            return codigoSecreto;
+        }
+
+        let opcionesNivelAlto: list<Color>
+            = this.listaColores.copy();
+
+        // Representa una posición sin ficha.
+        opcionesNivelAlto.append(Color(""));
+
+        for (let i: int = 0; i < 4; i++) {
+            let indice: int = random(
+                0,
+                len(opcionesNivelAlto) - 1
+            );
+
+            codigoSecreto.append(
+                opcionesNivelAlto[indice]
+            );
+        }
+
+        return codigoSecreto;
+    }
+    
 }
