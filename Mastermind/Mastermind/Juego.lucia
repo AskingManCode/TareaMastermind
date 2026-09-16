@@ -14,6 +14,7 @@ class Juego {
     let mensajes: Mensajes = Mensajes();
      let generadorCodigo: GeneradorCodigo = GeneradorCodigo();
      let nivelDificultad: int = NORMAL;
+     let combinacionSecreta: list<Color> = [];
 
     func leerPropuesta(): list<Color> {
     while (true) {
@@ -161,6 +162,11 @@ class Juego {
 
         this.hacerIntento(propuesta);
     }
+}
+    // Genera y guarda la combinación secreta según la dificultad
+    func generarCombinacionSecreta(): void {
+    this.combinacionSecreta
+        = this.generadorCodigo.generarCodigo();
 }
  
 }
