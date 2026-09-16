@@ -20,8 +20,11 @@ class Juego {
     func leerPropuesta(): list<Color> {
     while (true) {
 
-        // Solicita al jugador una nueva propuesta.
-        this.mensajes.mostrarSolicitudPropuesta();
+        // Solicita una propuesta y muestra instrucciones
+        // segun la dificultad seleccionada
+        this.mensajes.mostrarSolicitudPropuesta(
+            this.nivelDificultad
+        );
 
         // Separa por comas las posiciones ingresadas.
         let entrada: string = input("> ").trim();
@@ -31,7 +34,7 @@ class Juego {
         // La propuesta debe contener exactamente cuatro posiciones.
         if (len(partes) != 4) {
             this.mensajes.mostrarErrorPropuesta(
-                "debe ingresar exactamente cuatro colores."
+                "debe ingresar exactamente cuatro posiciones."
             );
 
             continue;

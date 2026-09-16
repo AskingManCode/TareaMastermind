@@ -1,9 +1,33 @@
+import "./Dificultad.lucia";
 class Mensajes {
 
-    func mostrarSolicitudPropuesta(): void {
-        print("Ingrese cuatro colores separados por comas.");
-        print("Colores: Amarillo, Rojo, Verde, Azul, Morado y Negro.");
-        print("Ejemplo: Rojo, Azul, Verde, Amarillo.");
+    func mostrarSolicitudPropuesta(
+    dificultad: int
+    ): void {
+        print("Ingrese cuatro posiciones separadas por comas.");
+    
+        print(
+            "Colores: Amarillo, Rojo, Verde, Azul, Morado y Negro."
+        );
+    
+        if (dificultad == ALTA) {
+            print(
+                "En nivel Alto puede dejar posiciones vacías."
+            );
+    
+            print(
+                "No escriba nada entre las comas para indicar un vacío."
+            );
+    
+            print(
+                "Ejemplo: Rojo,,Verde,Negro."
+            );
+        } else {
+            print(
+                "Ejemplo: Rojo,Azul,Verde,Amarillo."
+            );
+        }
+    
         print("");
     }
 
