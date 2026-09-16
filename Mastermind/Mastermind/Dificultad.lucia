@@ -1,1 +1,4 @@
 // No es una clase
+
+const NORMAL: int = 1;
+const ALTA: int = 2;
