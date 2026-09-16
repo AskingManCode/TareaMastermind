@@ -2,8 +2,14 @@ import "./Mensajes.lucia";
 import "./Color.lucia";
 import "./GeneradorCodigo.lucia";
 import "./Dificultad.lucia";
-
+const MAX_INTENTOS_PERMITIDOS: int = 15;
 class Juego {
+     // Guarda los intentos válidos realizados por el jugador.
+    let intentosRealizados: int = 0;
+    // Guarda el límite de intentos configurado para la partida.
+    let maxIntentos: int = MAX_INTENTOS_PERMITIDOS;
+    // Indica si la partida ya terminó.
+    let gameOver: bool = false;
 
     let mensajes: Mensajes = Mensajes();
      let generadorCodigo: GeneradorCodigo = GeneradorCodigo();
@@ -37,7 +43,7 @@ class Juego {
             let color: Color = Color(nombre);      //convierte el nombre ingresado a tipo color
 
             // Comprueba si el color pertenece a los colores permitidos
-            if  (!color.esColorValido()) {
+            if (!color.esColorValido()) { {
                 this.mensajes.mostrarErrorPropuesta(
                     "el color ${nombre} no está permitido."
                 );
@@ -78,7 +84,7 @@ class Juego {
             this.generadorCodigo.setNivelDificultad(ALTA);
 
             this.mensajes.mostrarResultadoDificultad(
-                "Dificultad seleccionada: Alto."
+                "Dificultad seleccionada: Alta."
             );
 
             return; // si entrada es valida rompe bucle
@@ -89,5 +95,72 @@ class Juego {
         ); // si entrada no es valida llama a metodo en mensaje y reintenta la lectura
     }
  }
+        // Cuenta una propuesta válida y muestra los intentos restantes
+    func hacerIntento(colores: list<Color>): void {
+        this.intentosRealizados = this.intentosRealizados + 1;
+
+        this.mensajes.mostrarIntentosRestantes(
+            this.getIntentosRestantes()
+        );
+    }
+        func seleccionarCantidadIntentos(): void {
+    while (true) {
+        this.mensajes.mostrarMenuIntentos();
+
+        let entrada: string = input("> ").trim();
+
+        if (entrada == "") {
+            this.setMaxIntentos(MAX_INTENTOS_PERMITIDOS);
+
+            this.mensajes.mostrarResultadoIntentos(
+                "Se usaran 15 intentos."
+            );
+            return;
+        }
+
+        if (!entrada.is_numeric()) {
+            this.mensajes.mostrarResultadoIntentos(
+                "Ingrese un numero."
+            );
+            continue;
+        }
+
+        let cantidad: int = entrada.to_int();
+
+        if (cantidad < 1 || cantidad > MAX_INTENTOS_PERMITIDOS) {
+            this.mensajes.mostrarResultadoIntentos(
+                "Ingrese un numero entre 1 y 15."
+            );
+            continue;
+        }
+
+        this.setMaxIntentos(cantidad);
+
+        this.mensajes.mostrarResultadoIntentos(
+            "Cantidad configurada: ${cantidad}."
+        );
+        return;
+    }
+}
+    func setMaxIntentos(maxIntentos: int): void {
+        if (
+            maxIntentos > 0
+            && maxIntentos <= MAX_INTENTOS_PERMITIDOS
+        ) {
+            this.maxIntentos = maxIntentos;
+        }
+    }
+
+    // Calcula cuántos intentos le quedan al jugador
+    func getIntentosRestantes(): int {
+        return this.maxIntentos - this.intentosRealizados;
+    }
+    func jugar(): void {
+    while (this.getIntentosRestantes() > 0) {
+        let propuesta: list<Color> = this.leerPropuesta();
+
+        this.hacerIntento(propuesta);
+    }
+}
  
 }
