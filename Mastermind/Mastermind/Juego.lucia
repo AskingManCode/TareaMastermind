@@ -2,6 +2,9 @@ import "./Mensajes.lucia";
 import "./Color.lucia";
 import "./GeneradorCodigo.lucia";
 import "./Dificultad.lucia";
+import "./Evaluador.lucia";
+import "./Feedback.lucia";
+
 const MAX_INTENTOS_PERMITIDOS: int = 15;
 class Juego {
      // Guarda los intentos válidos realizados por el jugador.
@@ -120,10 +123,25 @@ class Juego {
  }
         // Cuenta una propuesta válida y muestra los intentos restantes
     func hacerIntento(colores: list<Color>): void {
+         // HU-06: solo una propuesta ya validada consume un intento
         this.intentosRealizados = this.intentosRealizados + 1;
+         //Evaluador compara la propuesta con el código secreto
+        // y devuelve el resultado dentro de Feedback
+        let evaluador:Evaluador=Evaluador(
+             this.combinacionSecreta
+        );
 
+        let feedback: Feedback=evaluador.EvaluarIntento(
+             colores
+        );
+        //HU-07: cuatro posiciones correctas equivalen a victoria
+        if(feedback.getPosicionCorrecta()==4){
+             this.gameOver=true;
+             this.mensajes.mensajeGameOver(true);
+             return;
+        }
         this.mensajes.mostrarIntentosRestantes(
-            this.getIntentosRestantes()
+              this.getIntentosRestantes()
         );
     }
         func seleccionarCantidadIntentos(): void {
@@ -178,17 +196,26 @@ class Juego {
     func getIntentosRestantes(): int {
         return this.maxIntentos - this.intentosRealizados;
     }
-    func jugar(): void {
-    while (this.getIntentosRestantes() > 0) {
+    func isGameOver(): bool {
+    return this.gameOver;
+}
+
+func jugar(): void {
+    while (
+        !this.gameOver
+        && this.getIntentosRestantes() > 0
+    ) {
         let propuesta: list<Color> = this.leerPropuesta();
 
         this.hacerIntento(propuesta);
     }
 }
-    // Genera y guarda la combinación secreta según la dificultad
-    func generarCombinacionSecreta(): void {
+
+// Genera y guarda la combinación secreta según la dificultad
+func generarCombinacionSecreta(): void {
     this.combinacionSecreta
         = this.generadorCodigo.generarCodigo();
 }
- 
 }
+
+    
