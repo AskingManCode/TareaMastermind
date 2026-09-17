@@ -1,4 +1,67 @@
+import "./Color.lucia";
+import "./Feedback.lucia";
+
 class Evaluador {
 
+    let combinacionSecreta: list<Color> = [];
+
+    constructor(combinacionSecreta: list<Color>) {
     
+        this.combinacionSecreta = combinacionSecreta;
+    }
+    
+    func EvaluarIntento(intetoRealizado: list<Color>): Feedback {
+    
+        let negras: int = 0;
+        let blancas: int = 0;
+
+        let secretaUsada: list<bool> = [false, false, false, false];
+        let propuestaUsada: list<bool> = [false, false, false, false];
+
+        // Buscar Fichas Negras (Color y Posición exactos)
+        for (let i: int = 0; i < 4; i++) {
+        
+            let colorPropuesta: string = intetoRealizado[i].obtenerNombreColor();
+            let colorSecreto: string = this.combinacionSecreta[i].obtenerNombreColor();
+
+            if (colorPropuesta == colorSecreto) {
+            
+                negras = negras + 1;
+                secretaUsada[i] = true;
+                propuestaUsada[i] = true;
+            }
+        }
+
+        // Buscar Fichas Blancas (Mismo color en distinta posición)
+        for (let i: int = 0; i < 4; i++) {
+        
+            if (propuestaUsada[i]) {
+                continue;
+            }
+
+            let colorPropuesta: string = intetoRealizado[i].obtenerNombreColor();
+
+            // Ignorar posiciones vacías en nivel alto para conteo de blancas
+            if (colorPropuesta == "") {
+                continue;
+            }
+
+            for (let j: int = 0; j < 4; j++) {
+            
+                if (!secretaUsada[j]) {
+                
+                    let colorSecreto: string = this.combinacionSecreta[j].obtenerNombreColor();
+
+                    if (colorPropuesta == colorSecreto) {
+                    
+                        blancas = blancas + 1;
+                        secretaUsada[j] = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return Feedback(negras, blancas);
+    }
 }
