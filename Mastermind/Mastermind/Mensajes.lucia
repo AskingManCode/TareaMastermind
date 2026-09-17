@@ -104,4 +104,9 @@ class Mensajes {
             print("Has ganado el juego");
         }
     }
+
+    func mostrarFeedback(feedback: Feedback): void {
+    
+        print("Pistas -> Fichas Negras: ${feedback.getPosicionCorrecta()} | Fichas Blancas: ${feedback.getColorCorrecto()}");
+    }
 }
