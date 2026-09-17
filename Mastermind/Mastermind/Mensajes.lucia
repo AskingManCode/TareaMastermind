@@ -94,4 +94,14 @@ class Mensajes {
     
         print("Intentos restantes: ${cantidad}.");
     }
+
+    func mensajeGameOver(gano:bool):void{
+        
+        if(gano){
+            
+            print("");
+            print("Felicidades adivinaste la combinacion secreta");
+            print("Has ganado el juego");
+        }
+    }
 }
