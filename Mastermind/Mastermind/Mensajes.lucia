@@ -14,7 +14,8 @@ class Mensajes {
     }
 
     func mensajeMalImput(): void {
-    
+
+        print("");
         print("Opción no válida, intente nuevamente.");
     }
 
@@ -24,9 +25,12 @@ class Mensajes {
         print("¿Desea ver las instrucciones del juego?");
         print("[1] Sí");
         print("[2] No");
+        // Opción para volver al menú principal
+        print("[3] Volver");
     }
 
     func mostrarInstrucciones(): void {
+
         print("");
         print("=================== INSTRUCCIONES ===================");
         print("El objetivo es descifrar un código secreto de 4 posiciones.");
@@ -41,16 +45,22 @@ class Mensajes {
         print("* Ficha Negra: Indica que acertó el color y la posición exacta.");
         print("* Ficha Blanca: Indica que acertó el color, pero está en la posición incorrecta.");
         print("");
+        print("NAVEGACIÓN Y ABANDONO:");
+        print("* Durante la configuración puede seleccionar [3] Volver para regresar al paso anterior.");
+        print("* En la cantidad de intentos puede escribir 'Volver' para regresar al paso anterior.");
+        print("* Puede ingresar la palabra 'Salir' durante la lectura de su propuesta para abandonar la partida.");
+        print("");
         print("Ganas si obtienes 4 fichas negras antes de agotar sus intentos.");
         print("====================================================");
     }
 
     func mostrarSolicitudPropuesta(dificultad: int): void {
-    
+        
         print("");
-        print("Ingrese cuatro posiciones separadas por comas.");
+        print("---------------------------------------------------");
+        print("Ingrese cuatro posiciones separadas por comas (o escriba 'Salir' para abandonar):");
         print("Colores: Amarillo, Rojo, Verde, Azul, Morado y Negro.");
-
+        
         if (dificultad == ALTA) {
         
             print("En nivel Alto puede dejar posiciones vacías (ej. Rojo,,Verde,Negro).");
@@ -59,10 +69,30 @@ class Mensajes {
 
             print("Ejemplo: Rojo,Azul,Verde,Amarillo.");
         }
+
+        print("---------------------------------------------------");
+    }
+
+
+    func mostrarMensajeAbandono(): void {
+    
+        print("");
+        print("---------------------------------------------------");
+        print("Ha abandonado la partida actual. Regresando al menú principal...");
+        print("---------------------------------------------------");
+    }
+
+    // HU-09: mensaje mostrado al volver al menú principal
+    // desde cualquier punto de la configuración
+    func mensajeVolverAlMenu(): void {
+
+        print("");
+        print("Volviendo al menú principal...");
     }
 
     func mostrarErrorPropuesta(error: string): void {
-    
+
+        print("");
         print("Propuesta inválida: ${error}");
     }
 
@@ -72,6 +102,8 @@ class Mensajes {
         print("Seleccione la dificultad:");
         print("[1] Normal");
         print("[2] Alta");
+        // HU-09: opción para volver al paso anterior
+        print("[3] Volver");
     }
 
     func mostrarResultadoDificultad(mensaje: string): void {
@@ -83,6 +115,8 @@ class Mensajes {
     
         print("");
         print("Ingrese la cantidad de intentos para la partida (1-15):");
+        // HU-09: permite regresar al paso anterior desde esta configuración
+        print("(Presione Enter para usar 15, o escriba 'Volver' para regresar)");
     }
 
     func mostrarResultadoIntentos(mensaje: string): void {
@@ -93,25 +127,32 @@ class Mensajes {
     func mostrarIntentosRestantes(cantidad: int): void {
     
         print("Intentos restantes: ${cantidad}.");
+        print("");
     }
 
     func mensajeGameOver(gano: bool): void {
     
+        print("");
+        print("=============================");
+
         if (gano) {
         
-            print("");
-            print("Felicidades, adivinó la combinación secreta.");
-            print("¡Ha ganado el juego!");
-            
+            print("Felicidades, adivinaste la combinación secreta.");
+            print("¡Has ganado el juego!");
+
         } else {
         
-            print("");
-            print("Se has quedado sin intentos. ¡Ha perdido!");
+            print("Se ha quedado sin intentos. ¡Ha perdido!");
         }
+
+        print("=============================");
+        print("");
     }
 
     func mostrarFeedback(posicionesCorrectas: int, coloresCorrectos: int): void {
         
-        print("Resultado del intento -> Fichas Negras: ${posicionesCorrectas} | Fichas Blancas: ${coloresCorrectos}");
+        print("");
+        print(">> Resultado del intento:");
+        print("   Fichas Negras: ${posicionesCorrectas} | Fichas Blancas: ${coloresCorrectos}");
     }
 }
