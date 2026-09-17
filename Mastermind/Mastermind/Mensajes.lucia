@@ -1,69 +1,107 @@
 import "./Dificultad.lucia";
+
 class Mensajes {
 
-    func mostrarSolicitudPropuesta(
-    dificultad: int
-    ): void {
-        print("Ingrese cuatro posiciones separadas por comas.");
-    
-        print(
-            "Colores: Amarillo, Rojo, Verde, Azul, Morado y Negro."
-        );
-    
-        if (dificultad == ALTA) {
-            print(
-                "En nivel Alto puede dejar posiciones vacías."
-            );
-    
-            print(
-                "No escriba nada entre las comas para indicar un vacío."
-            );
-    
-            print(
-                "Ejemplo: Rojo,,Verde,Negro."
-            );
-        } else {
-            print(
-                "Ejemplo: Rojo,Azul,Verde,Amarillo."
-            );
-        }
+    func mensajeBienvenida(): void {
     
         print("");
+        print("=============================");
+        print(">> Bienvenido a Mastermind <<");
+        print("=============================");
+        print("¿Desea jugar?");
+        print("[1] Continuar");
+        print("[2] Salir");
+    }
+
+    func mensajeMalImput(): void {
+    
+        print("Opción no válida, intente nuevamente.");
+    }
+
+    func preguntarVerInstrucciones(): void {
+    
+        print("");
+        print("¿Desea ver las instrucciones del juego?");
+        print("[1] Sí");
+        print("[2] No");
+    }
+
+    func mostrarInstrucciones(): void {
+        print("");
+        print("=================== INSTRUCCIONES ===================");
+        print("El objetivo es descifrar un código secreto de 4 posiciones.");
+        print("Los colores permitidos son: Amarillo, Rojo, Verde, Azul, Morado y Negro.");
+        print("");
+        print("DIFICULTAD Y REGLAS:");
+        print("* Nivel Normal: No se repiten colores y no hay espacios vacíos.");
+        print("* Nivel Alto:  Se pueden repetir colores y se permiten posiciones vacías.");
+        print("               (Indique un vacío dejando el espacio entre comas, ej: Rojo,,Azul,Verde).");
+        print("");
+        print("EVALUACIÓN Y PISTAS:");
+        print("* Ficha Negra: Indica que acertó el color y la posición exacta.");
+        print("* Ficha Blanca: Indica que acertó el color, pero está en la posición incorrecta.");
+        print("");
+        print("Ganas si obtienes 4 fichas negras antes de agotar sus intentos.");
+        print("====================================================");
+    }
+
+    func mostrarSolicitudPropuesta(dificultad: int): void {
+    
+        print("");
+        print("Ingrese cuatro posiciones separadas por comas.");
+        print("Colores: Amarillo, Rojo, Verde, Azul, Morado y Negro.");
+
+        if (dificultad == ALTA) {
+        
+            print("En nivel Alto puede dejar posiciones vacías (ej. Rojo,,Verde,Negro).");
+
+        } else {
+
+            print("Ejemplo: Rojo,Azul,Verde,Amarillo.");
+        }
     }
 
     func mostrarErrorPropuesta(error: string): void {
+    
         print("Propuesta inválida: ${error}");
     }
 
     func mostrarMenuDificultad(): void {
+    
         print("");
         print("Seleccione la dificultad:");
-        print("1. Normal");
-        print("2. Alta");
+        print("[1] Normal");
+        print("[2] Alta");
     }
 
     func mostrarResultadoDificultad(mensaje: string): void {
+    
         print(mensaje);
     }
 
     func mostrarMenuIntentos(): void {
+    
         print("");
-        print("Ingrese la cantidad de intentos para la partida.");
-        print("Debe ser un número entre 1 y 15.");
+        print("Ingrese la cantidad de intentos para la partida (1-15):");
     }
 
     func mostrarResultadoIntentos(mensaje: string): void {
+    
         print(mensaje);
     }
 
     func mostrarIntentosRestantes(cantidad: int): void {
+    
         print("Intentos restantes: ${cantidad}.");
     }
+
     func mensajeGameOver(gano:bool):void{
-    if(gano){
-       print("");
-       print("Felicidades adivinaste la combinacion secreta");
-       print("Has ganado el juego");
-    }
+        
+        if(gano){
+            
+            print("");
+            print("Felicidades adivinaste la combinacion secreta");
+            print("Has ganado el juego");
+        }
     }
 }

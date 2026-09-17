@@ -6,8 +6,10 @@ import "./Evaluador.lucia";
 import "./Feedback.lucia";
 
 const MAX_INTENTOS_PERMITIDOS: int = 15;
+
 class Juego {
-     // Guarda los intentos válidos realizados por el jugador.
+
+    // Guarda los intentos válidos realizados por el jugador.
     let intentosRealizados: int = 0;
     // Guarda el límite de intentos configurado para la partida.
     let maxIntentos: int = MAX_INTENTOS_PERMITIDOS;
@@ -15,207 +17,244 @@ class Juego {
     let gameOver: bool = false;
 
     let mensajes: Mensajes = Mensajes();
-     let generadorCodigo: GeneradorCodigo = GeneradorCodigo();
-     let nivelDificultad: int = NORMAL;
-     let combinacionSecreta: list<Color> = [];
+    let generadorCodigo: GeneradorCodigo = GeneradorCodigo();
+    let nivelDificultad: int = NORMAL;
+    let combinacionSecreta: list<Color> = [];
+
+    constructor() {
+        this.inicio();
+    }
+
+    // inicia el juego, da la bienvenida e inicia el juego
+    func inicio(): void {
+
+        let entrada: string = "";
+
+        while (entrada != "2") {
+
+            mensajes.mensajeBienvenida();
+            entrada = input("> ").trim();
+
+            if (entrada == "1") {
+
+                this.jugar();
+
+            } else if (entrada == "2") {
+
+                return;
+
+            } else {
+
+                mensajes.mensajeMalImput();
+            }
+        }
+    }
+
+    // El usuario decide si ver las instrucciones o no
+    func gestionarInstrucciones(): void {
+
+        while (true) {
+
+            this.mensajes.preguntarVerInstrucciones();
+            let opcion: string = input("> ").trim();
+
+            if (opcion == "1") {
+
+                this.mensajes.mostrarInstrucciones();
+                return;
+
+            } else if (opcion == "2") {
+
+                return;
+
+            } else {
+
+                this.mensajes.mensajeMalImput();
+            }
+        }
+    }
 
     //lee la entrada y valida la propuesta
     func leerPropuesta(): list<Color> {
-    while (true) {
 
-        // Solicita una propuesta y muestra instrucciones
-        // segun la dificultad seleccionada
-        this.mensajes.mostrarSolicitudPropuesta(
-            this.nivelDificultad
-        );
+        while (true) {
 
-        // Separa por comas las posiciones ingresadas.
-        let entrada: string = input("> ").trim();
-        let partes: list<string> = entrada.split(",");
-        let propuesta: list<Color> = [];
+            // Solicita una propuesta y muestra instrucciones
+            // segun la dificultad seleccionada
+            this.mensajes.mostrarSolicitudPropuesta(this.nivelDificultad);
 
-        // La propuesta debe contener exactamente cuatro posiciones.
-        if (len(partes) != 4) {
-            this.mensajes.mostrarErrorPropuesta(
-                "debe ingresar exactamente cuatro posiciones."
-            );
+            // Separa por comas las posiciones ingresadas.
+            let entrada: string = input("> ").trim();
+            let partes: list<string> = entrada.split(",");
+            let propuesta: list<Color> = [];
 
-            continue;
-        }
+            // La propuesta debe contener exactamente cuatro posiciones.
+            if (len(partes) != 4) {
 
-        let valida: bool = true;
+                this.mensajes.mostrarErrorPropuesta("debe ingresar exactamente cuatro posiciones.");
+                continue;
+            }
 
-        // Valida cada posición de la propuesta
-        for (let i: int = 0; i < len(partes); i++) {
+            let valida: bool = true;
 
-            // Elimina espacios externos y normaliza el nombre
-            let nombre: string =
-                partes[i].trim().capitalize();
+            // Valida cada posición de la propuesta
+            for (let i: int = 0; i < len(partes); i++) {
 
-            // Crea el objeto que representa la posición ingresada
-            let color: Color = Color(nombre);
+                // Elimina espacios externos y normaliza el nombre
+                let nombre: string = partes[i].trim().capitalize();
+                // Crea el objeto que representa la posición ingresada
+                let color: Color = Color(nombre);
 
-            // En dificultad Alta se permite una posición vacía
-            if (
-                nombre == ""
-                && this.nivelDificultad == ALTA
-            ) {
-                propuesta.append(color);
-            } else {
+                // En dificultad Alta se permite una posición vacía
+                if (nombre == ""&& this.nivelDificultad == ALTA) {
 
-                // Comprueba que el nombre pertenezca
-                // a colores permitido
-                if (!color.esColorValido()) {
-                    this.mensajes.mostrarErrorPropuesta(
-                        "el color ${nombre} no está permitido."
-                    );
-
-                    valida = false;
-                } else {
-                    // Agrega un color válido a la propuesta
                     propuesta.append(color);
+
+                } else {
+
+                    // Comprueba que el nombre pertenezca
+                    // a colores permitido
+                    if (!color.esColorValido()) {
+
+                        this.mensajes.mostrarErrorPropuesta("el color ${nombre} no está permitido.");
+                        valida = false;
+
+                    } else {
+
+                        // Agrega un color válido a la propuesta
+                        propuesta.append(color);
+                    }
                 }
             }
-        }
 
-        // Devuelve la propuesta solamente cuando todas
-        // sus posiciones fueron validadas
-        if (valida) {
-            return propuesta;
+            // Devuelve la propuesta solamente cuando todas
+            // sus posiciones fueron validadas
+            if (valida) {
+
+                return propuesta;
+            }
         }
     }
-}
 
- // Muestra opciones de dificultad y gestiona la seleccion del usuario.
- func seleccionarDificultad(): void {
-    while (true) { 
-        this.mensajes.mostrarMenuDificultad();
+    // Muestra opciones de dificultad y gestiona la seleccion del usuario.
+    func seleccionarDificultad(): void {
 
-        let opcion: string = input("> ").trim();
+        while (true) {
 
-        // Opción 1: Configurar nivel Normal
-        if (opcion == "1") {
-            this.nivelDificultad = NORMAL;
-            this.generadorCodigo.setNivelDificultad(NORMAL);
+            this.mensajes.mostrarMenuDificultad();
+            let opcion: string = input("> ").trim();
 
-            this.mensajes.mostrarResultadoDificultad(
-                "Dificultad seleccionada: Normal."
-            );
+            // Opción 1: Configurar nivel Normal
+            if (opcion == "1") {
 
-            return; // si entrada es valida rompe bucle
+                this.nivelDificultad = NORMAL;
+                this.generadorCodigo.setNivelDificultad(NORMAL);
+                this.mensajes.mostrarResultadoDificultad("Dificultad seleccionada: Normal.");
+                return; // si entrada es valida rompe bucle
+            }
+
+            // Opción 2: Configurar nivel Alto
+            if (opcion == "2") {
+
+                this.nivelDificultad = ALTA;
+                this.generadorCodigo.setNivelDificultad(ALTA);
+                this.mensajes.mostrarResultadoDificultad("Dificultad seleccionada: Alta.");
+                return;
+            }
+
+            // si entrada no es valida llama a metodo en mensaje y reintenta la lectura
+            this.mensajes.mostrarResultadoDificultad("Opción inválida. Ingrese 1 o 2.");
         }
-        // // Opción 2: Configurar nivel Alto
-        if (opcion == "2") {
-            this.nivelDificultad = ALTA;
-            this.generadorCodigo.setNivelDificultad(ALTA);
-
-            this.mensajes.mostrarResultadoDificultad(
-                "Dificultad seleccionada: Alta."
-            );
-
-            return; // si entrada es valida rompe bucle
-        }
-
-        this.mensajes.mostrarResultadoDificultad( 
-            "Opción inválida. Ingrese 1 o 2."      
-        ); // si entrada no es valida llama a metodo en mensaje y reintenta la lectura
     }
- }
-        // Cuenta una propuesta válida y muestra los intentos restantes
+
+    // Cuenta una propuesta válida y muestra los intentos restantes
     func hacerIntento(colores: list<Color>): void {
-         // HU-06: solo una propuesta ya validada consume un intento
+
+        // HU-06: solo una propuesta ya validada consume un intento
         this.intentosRealizados = this.intentosRealizados + 1;
-         //Evaluador compara la propuesta con el código secreto
+
+        //Evaluador compara la propuesta con el código secreto
         // y devuelve el resultado dentro de Feedback
-        let evaluador:Evaluador=Evaluador(
-             this.combinacionSecreta
-        );
+        let evaluador: Evaluador = Evaluador(this.combinacionSecreta);
 
-        let feedback: Feedback=evaluador.EvaluarIntento(
-             colores
-        );
+        let feedback: Feedback = evaluador.EvaluarIntento(colores);
+
         //HU-07: cuatro posiciones correctas equivalen a victoria
-        if(feedback.getPosicionCorrecta()==4){
-             this.gameOver=true;
-             this.mensajes.mensajeGameOver(true);
-             return;
-        }
-        this.mensajes.mostrarIntentosRestantes(
-              this.getIntentosRestantes()
-        );
-    }
-        func seleccionarCantidadIntentos(): void {
-    while (true) {
-        this.mensajes.mostrarMenuIntentos();
+        if (feedback.getPosicionCorrecta() == 4) {
 
-        let entrada: string = input("> ").trim();
-
-        if (entrada == "") {
-            this.setMaxIntentos(MAX_INTENTOS_PERMITIDOS);
-
-            this.mensajes.mostrarResultadoIntentos(
-                "Se usaran 15 intentos."
-            );
+            this.gameOver = true;
+            this.mensajes.mensajeGameOver(true);
             return;
         }
 
-        if (!entrada.is_numeric()) {
-            this.mensajes.mostrarResultadoIntentos(
-                "Ingrese un numero."
-            );
-            continue;
-        }
+        this.mensajes.mostrarIntentosRestantes(this.getIntentosRestantes());
 
-        let cantidad: int = entrada.to_int();
-
-        if (cantidad < 1 || cantidad > MAX_INTENTOS_PERMITIDOS) {
-            this.mensajes.mostrarResultadoIntentos(
-                "Ingrese un numero entre 1 y 15."
-            );
-            continue;
-        }
-
-        this.setMaxIntentos(cantidad);
-
-        this.mensajes.mostrarResultadoIntentos(
-            "Cantidad configurada: ${cantidad}."
-        );
-        return;
     }
-}
+
+    func seleccionarCantidadIntentos(): void {
+
+        while (true) {
+
+            this.mensajes.mostrarMenuIntentos();
+            let entrada: string = input("> ").trim();
+
+            if (entrada == "") {
+
+                this.setMaxIntentos(MAX_INTENTOS_PERMITIDOS);
+                this.mensajes.mostrarResultadoIntentos("Se usarán 15 intentos.");
+                return;
+            }
+
+            if (!entrada.is_numeric()) {
+
+                this.mensajes.mostrarResultadoIntentos("Ingrese un número.");
+                continue;
+            }
+
+            let cantidad: int = entrada.to_int();
+
+            if (cantidad < 1 || cantidad > MAX_INTENTOS_PERMITIDOS) {
+
+                this.mensajes.mostrarResultadoIntentos("Ingrese un número entre 1 y 15.");
+                continue;
+            }
+
+            this.setMaxIntentos(cantidad);
+            this.mensajes.mostrarResultadoIntentos("Cantidad configurada: ${cantidad}.");
+            return;
+        }
+    }
+
     func setMaxIntentos(maxIntentos: int): void {
-        if (
-            maxIntentos > 0
-            && maxIntentos <= MAX_INTENTOS_PERMITIDOS
-        ) {
+
+        if (maxIntentos > 0 && maxIntentos <= MAX_INTENTOS_PERMITIDOS) {
             this.maxIntentos = maxIntentos;
         }
     }
 
     // Calcula cuántos intentos le quedan al jugador
     func getIntentosRestantes(): int {
+
         return this.maxIntentos - this.intentosRealizados;
     }
     func isGameOver(): bool {
-    return this.gameOver;
-}
+        return this.gameOver;
+    }
 
-func jugar(): void {
-    while (
-        !this.gameOver
-        && this.getIntentosRestantes() > 0
-    ) {
-        let propuesta: list<Color> = this.leerPropuesta();
+    // Flujo normal del juego
+    func jugar(): void {
 
-        this.hacerIntento(propuesta);
+        while (!this.gameOver && this.getIntentosRestantes() > 0) {
+
+            let propuesta: list<Color> = this.leerPropuesta();
+
+            this.hacerIntento(propuesta);
+        }
+    }
+
+    // Genera y guarda la combinación secreta según la dificultad
+    func generarCombinacionSecreta(): void {
+
+        this.combinacionSecreta = this.generadorCodigo.generarCodigo();
     }
 }
-
-// Genera y guarda la combinación secreta según la dificultad
-func generarCombinacionSecreta(): void {
-    this.combinacionSecreta
-        = this.generadorCodigo.generarCodigo();
-}
-}
-
-    
