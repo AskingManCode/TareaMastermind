@@ -51,7 +51,9 @@ class Juego {
     }
 
     // El usuario decide si ver las instrucciones o no
-    func gestionarInstrucciones(): void {
+    // HU-09: devuelve el número del siguiente paso de configuración:
+    // 2 para avanzar a dificultad, 0 para volver al menú principal
+    func gestionarInstrucciones(): int {
 
         while (true) {
 
@@ -61,11 +63,16 @@ class Juego {
             if (opcion == "1") {
 
                 this.mensajes.mostrarInstrucciones();
-                return;
+                return 2;
 
             } else if (opcion == "2") {
 
-                return;
+                return 2;
+
+            } else if (opcion == "3") {
+
+                // HU-09: el jugador decide volver al menú principal
+                return 0;
 
             } else {
 
@@ -85,6 +92,16 @@ class Juego {
 
             // Separa por comas las posiciones ingresadas.
             let entrada: string = input("> ").trim();
+
+            // Permite abandonar el juego si el usuario ingresa "salir" (HU-09)
+            // Nota: capitalize() pone mayúscula solo la primera letra,
+            // por eso se compara contra "Salir"
+            if (entrada.capitalize() == "Salir") {
+
+                let propuestaSalir: list<Color> = [];
+                return propuestaSalir;
+            }
+
             let partes: list<string> = entrada.split(",");
             let propuesta: list<Color> = [];
 
@@ -137,7 +154,9 @@ class Juego {
     }
 
     // Muestra opciones de dificultad y gestiona la seleccion del usuario.
-    func seleccionarDificultad(): void {
+    // HU-09: devuelve el número del siguiente paso de configuración:
+    // 3 para avanzar a cantidad de intentos, 1 para volver a instrucciones
+    func seleccionarDificultad(): int {
 
         while (true) {
 
@@ -150,7 +169,7 @@ class Juego {
                 this.nivelDificultad = NORMAL;
                 this.generadorCodigo.setNivelDificultad(NORMAL);
                 this.mensajes.mostrarResultadoDificultad("Dificultad seleccionada: Normal.");
-                return; // si entrada es valida rompe bucle
+                return 3; // si entrada es valida rompe bucle
             }
 
             // Opción 2: Configurar nivel Alto
@@ -159,11 +178,17 @@ class Juego {
                 this.nivelDificultad = ALTA;
                 this.generadorCodigo.setNivelDificultad(ALTA);
                 this.mensajes.mostrarResultadoDificultad("Dificultad seleccionada: Alta.");
-                return;
+                return 3;
+            }
+
+            // HU-09: Opción 3: el jugador decide volver al paso anterior
+            if (opcion == "3") {
+
+                return 1;
             }
 
             // si entrada no es valida llama a metodo en mensaje y reintenta la lectura
-            this.mensajes.mostrarResultadoDificultad("Opción inválida. Ingrese 1 o 2.");
+            this.mensajes.mostrarResultadoDificultad("Opción inválida. Ingrese 1, 2 o 3.");
         }
     }
 
@@ -193,18 +218,28 @@ class Juego {
 
     }
 
-    func seleccionarCantidadIntentos(): void {
+    // HU-09: devuelve el número del siguiente paso de configuración:
+    // 4 para finalizar la configuración, 2 para volver a dificultad
+    func seleccionarCantidadIntentos(): int {
 
         while (true) {
 
             this.mensajes.mostrarMenuIntentos();
             let entrada: string = input("> ").trim();
 
+            // HU-09: permite volver al paso anterior de la configuración
+            // Nota: capitalize() pone mayúscula solo la primera letra,
+            // por eso se compara contra "Volver"
+            if (entrada.capitalize() == "Volver") {
+
+                return 2;
+            }
+
             if (entrada == "") {
 
                 this.setMaxIntentos(MAX_INTENTOS_PERMITIDOS);
                 this.mensajes.mostrarResultadoIntentos("Se usarán 15 intentos.");
-                return;
+                return 4;
             }
 
             if (!entrada.is_numeric()) {
@@ -223,7 +258,7 @@ class Juego {
 
             this.setMaxIntentos(cantidad);
             this.mensajes.mostrarResultadoIntentos("Cantidad configurada: ${cantidad}.");
-            return;
+            return 4;
         }
     }
 
@@ -246,23 +281,55 @@ class Juego {
     // Flujo normal del juego
     func jugar(): void {
 
-        // Configuración previa de la partida
-        this.gestionarInstrucciones();
-        this.seleccionarDificultad();
-        this.seleccionarCantidadIntentos();
-        this.generarCombinacionSecreta();
-    
         // Reiniciar variables de estado para la nueva partida
         this.intentosRealizados = 0;
         this.gameOver = false;
-    
+
+        // HU-09: configuración paso a paso; cada método devuelve
+        // el siguiente paso (1-3), 0 para salir al menú principal
+        // y 4 para terminar la configuración
+        let paso: int = 1;
+
+        while (paso > 0 && paso < 4) {
+
+            if (paso == 1) {
+
+                paso = this.gestionarInstrucciones();
+
+            } else if (paso == 2) {
+
+                paso = this.seleccionarDificultad();
+
+            } else if (paso == 3) {
+
+                paso = this.seleccionarCantidadIntentos();
+            }
+        }
+
+        // HU-09: el jugador decidió volver al menú principal
+        if (paso == 0) {
+
+            this.mensajes.mensajeVolverAlMenu();
+            return;
+        }
+
+        this.generarCombinacionSecreta();
+
         // Bucle principal de intentos
         while (!this.gameOver && this.getIntentosRestantes() > 0) {
 
             let propuesta: list<Color> = this.leerPropuesta();
+
+            // Si retorna lista vacía, el jugador decidió salir (HU-09)
+            if (len(propuesta) == 0) {
+                this.gameOver = true;
+                this.mensajes.mostrarMensajeAbandono();
+                return;
+            }
+
             this.hacerIntento(propuesta);
         }
-    
+
         // Mensaje si se agotan los intentos y no ganó
         if (!this.gameOver && this.getIntentosRestantes() == 0) {
             this.mensajes.mensajeGameOver(false);
