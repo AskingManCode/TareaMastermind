@@ -12,8 +12,8 @@ class GeneradorCodigo {
         Color("Verde"),
         Color("Azul"),
         Color("Morado"),
-        Color("Negro")
-        //Color("Blanco")
+        Color("Negro"),
+        Color("Blanco")
     ];
 
     func setNivelDificultad(dificultad: int): void {

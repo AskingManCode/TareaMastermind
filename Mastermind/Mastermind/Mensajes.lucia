@@ -34,7 +34,7 @@ class Mensajes {
         print("");
         print("=================== INSTRUCCIONES ===================");
         print("El objetivo es descifrar un código secreto de 4 posiciones.");
-        print("Los colores permitidos son: Amarillo, Rojo, Verde, Azul, Morado y Negro.");
+        print("Los colores permitidos son: Amarillo, Rojo, Verde, Azul, Morado, Negro y Blanco.");
         print("");
         print("DIFICULTAD Y REGLAS:");
         print("* Nivel Normal: No se repiten colores y no hay espacios vacíos.");
@@ -59,7 +59,7 @@ class Mensajes {
         print("");
         print("---------------------------------------------------");
         print("Ingrese cuatro posiciones separadas por comas (o escriba 'Salir' para abandonar):");
-        print("Colores: Amarillo, Rojo, Verde, Azul, Morado y Negro.");
+        print("Colores: Amarillo, Rojo, Verde, Azul, Morado, Negro y Blanco.");
         
         if (dificultad == ALTA) {
         
