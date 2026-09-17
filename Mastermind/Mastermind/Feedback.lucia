@@ -1,4 +1,21 @@
 class Feedback {
 
+    let posicionesCorrectas: int = 0; // Fichas Negras
+    let coloresCorrectos: int = 0;    // Fichas Blancas
+
+    constructor(negras: int, blancas: int) {
     
+        this.posicionesCorrectas = negras;
+        this.coloresCorrectos = blancas;
+    }
+
+    func getPosicionCorrecta(): int {
+    
+        return this.posicionesCorrectas;
+    }
+
+    func getColorCorrecto(): int {
+        
+        return this.coloresCorrectos;
+    }
 }
