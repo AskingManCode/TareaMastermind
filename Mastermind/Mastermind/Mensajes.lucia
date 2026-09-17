@@ -95,18 +95,23 @@ class Mensajes {
         print("Intentos restantes: ${cantidad}.");
     }
 
-    func mensajeGameOver(gano:bool):void{
+    func mensajeGameOver(gano: bool): void {
+    
+        if (gano) {
         
-        if(gano){
-            
             print("");
-            print("Felicidades adivinaste la combinacion secreta");
-            print("Has ganado el juego");
+            print("Felicidades, adivinó la combinación secreta.");
+            print("¡Ha ganado el juego!");
+            
+        } else {
+        
+            print("");
+            print("Se has quedado sin intentos. ¡Ha perdido!");
         }
     }
 
-    func mostrarFeedback(feedback: Feedback): void {
-    
-        print("Pistas -> Fichas Negras: ${feedback.getPosicionCorrecta()} | Fichas Blancas: ${feedback.getColorCorrecto()}");
+    func mostrarFeedback(posicionesCorrectas: int, coloresCorrectos: int): void {
+        
+        print("Resultado del intento -> Fichas Negras: ${posicionesCorrectas} | Fichas Blancas: ${coloresCorrectos}");
     }
 }

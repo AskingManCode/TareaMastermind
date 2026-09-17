@@ -176,8 +176,10 @@ class Juego {
         //Evaluador compara la propuesta con el código secreto
         // y devuelve el resultado dentro de Feedback
         let evaluador: Evaluador = Evaluador(this.combinacionSecreta);
-
         let feedback: Feedback = evaluador.EvaluarIntento(colores);
+
+        // Muestra el resultado de la propuesta (HU-05)
+        this.mensajes.mostrarFeedback(feedback.getPosicionCorrecta(), feedback.getColorCorrecto());
 
         //HU-07: cuatro posiciones correctas equivalen a victoria
         if (feedback.getPosicionCorrecta() == 4) {
@@ -244,11 +246,26 @@ class Juego {
     // Flujo normal del juego
     func jugar(): void {
 
+        // Configuración previa de la partida
+        this.gestionarInstrucciones();
+        this.seleccionarDificultad();
+        this.seleccionarCantidadIntentos();
+        this.generarCombinacionSecreta();
+    
+        // Reiniciar variables de estado para la nueva partida
+        this.intentosRealizados = 0;
+        this.gameOver = false;
+    
+        // Bucle principal de intentos
         while (!this.gameOver && this.getIntentosRestantes() > 0) {
 
             let propuesta: list<Color> = this.leerPropuesta();
-
             this.hacerIntento(propuesta);
+        }
+    
+        // Mensaje si se agotan los intentos y no ganó
+        if (!this.gameOver && this.getIntentosRestantes() == 0) {
+            this.mensajes.mensajeGameOver(false);
         }
     }
 
